@@ -300,18 +300,20 @@ document.addEventListener("DOMContentLoaded", () => {
     if (confirm("¿Vaciar todos los registros guardados en este dispositivo?")) {
       save([]);
       render();
+}
     }
   });
-});
   function borrarEgreso(id) {
   const data = load();
   const filtrados = data.filter(item => item.ID !== id);
   save(filtrados);
   render();
-}
+});
+ 
 
 </script>
 </body>
 </html>
+
 
 
