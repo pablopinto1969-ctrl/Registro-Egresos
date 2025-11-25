@@ -286,7 +286,7 @@ function rowHTML(item) {
       <td>${Number(item.Monto || 0).toFixed(2)}</td>
       <td>${escapeHtml(item.MedioPago || "")}</td>
       <td>${escapeHtml(item.Proyecto || "")}</td>
-      <td>${escapeHtml(item.Nota || "")}</td>
+      <td>${escapeHtml(item.Beneficario || "")}</td>
       <td>${escapeHtml(item.ID || "")}</td>
       <td><button class="delete-btn" onclick="borrarEgreso('${item.ID}')">✕</button></td>
     </tr>`;
@@ -393,6 +393,7 @@ document.addEventListener("DOMContentLoaded", () => {
 </script>
 </body>
 </html>
+
 
 
 
