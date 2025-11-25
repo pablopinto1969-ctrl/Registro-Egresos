@@ -4,22 +4,16 @@
   <meta charset="UTF-8" />
   <title>Registro de Egresos</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-
-  <!-- PWA -->
-  <link rel="manifest" href="manifest.webmanifest" />
-  <meta name="theme-color" content="#0b0c10" />
-
-  <!-- Ícono $ -->
+  <!-- Ícono $ embebido -->
   <link rel="icon" href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="%2314473d"/><text x="50" y="65" font-size="60" text-anchor="middle" fill="white" font-family="sans-serif">$</text></svg>' />
-
   <style>
     :root {
-      --bg:#ffffff;
-      --card:#13151a;
-      --muted:#2b2f3a;
-      --txt:#e6e7ea;
-      --accent:#16a34a;
-    }
+  --bg:#ffffff;
+  --card:#ffffff;
+  --muted:#d0d0d0;
+  --txt:#000000;
+  --accent:#16a34a;
+}
     * { box-sizing:border-box; font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; }
     body { margin:0; background:var(--bg); color:var(--txt); }
     header {
@@ -43,30 +37,38 @@
     }
     label { font-size:12px; opacity:.85; margin-bottom:4px; display:block; }
     input, select, textarea {
-      width:100%;
-      padding:10px 12px;
-      border-radius:10px;
-      border:1px solid var(--muted);
-      background:#0f1218;
-      color:var(--txt);
-      font-size:14px;
-    }
+  width:100%;
+  padding:10px 12px;
+  border-radius:10px;
+  border:1px solid var(--muted);
+  background:#ffffff;
+  color:#000000;
+  font-size:14px;
+}
     textarea { min-height:70px; resize:vertical; }
     button {
-      padding:10px 14px;
-      border-radius:10px;
-      border:1px solid var(--muted);
-      background:#0f1218;
-      color:var(--txt);
-      cursor:pointer;
-      font-size:14px;
-    }
+  padding:10px 14px;
+  border-radius:10px;
+  border:1px solid var(--muted);
+  background:#ffffff;
+  color:#000000;
+  cursor:pointer;
+  font-size:14px;
+}
     button.primary {
       background:var(--accent);
       border-color:#0a7f36;
       color:#fff;
     }
-    button + button { margin-left:8px; }
+    button + button {
+  padding:10px 14px;
+  border-radius:10px;
+  border:1px solid var(--muted);
+  background:#ffffff;
+  color:#000000;
+  cursor:pointer;
+  font-size:14px;
+}
     table { width:100%; border-collapse:collapse; font-size:14px; }
     th, td {
       padding:8px;
@@ -80,17 +82,8 @@
       opacity:.7;
       text-align:center;
     }
-    button.delete-btn {
-      background:#8b0000;
-      border-color:#5c0000;
-      color:white;
-      font-weight:bold;
-      padding:6px 10px;
-      border-radius:6px;
-    }
-    header button {
-      margin-top: 6px;
-      margin-bottom: 6px;
+    @media (max-width:600px) {
+      header h1 { font-size:16px; }
     }
   </style>
 </head>
@@ -105,7 +98,6 @@
 
   <div class="wrap">
     <div class="card">
-
       <div style="margin-bottom:10px;">
         <label for="fecha">Fecha</label>
         <input type="date" id="fecha" />
@@ -114,18 +106,18 @@
       <div style="margin-bottom:10px;">
         <label for="categoria">Categoría</label>
         <select id="categoria">
+          <!-- EDITA LAS CATEGORÍAS AQUÍ -->
           <optgroup label="Frecuentes">
             <option value="Movilización" selected>Movilización</option>
             <option value="Comida Afuera">Comida Afuera</option>
             <option value="Regalos">Regalos</option>
-            <option value="Alimentación">Alimentación</option>
           </optgroup>
           <optgroup label="Otras">
+            <option value="Alimentación">Alimentación</option>
             <option value="Casa">Casa</option>
             <option value="Salud">Salud</option>
-            <option value="Profesionales">Profesionales</option>
             <option value="Otros">Otros</option>
-           </optgroup>
+          </optgroup>
         </select>
       </div>
 
@@ -146,19 +138,17 @@
       <div style="margin-bottom:10px;">
         <label for="proyecto">Proyecto / Obra</label>
         <select id="proyecto">
+          <!-- EDITA LOS PROYECTOS AQUÍ -->
           <option value="">(Sin proyecto)</option>
-          <option value="Gastos Personales">Gastos Personales</option>
-          <option value="Giro de Negocio">Giro de Negocio</option>
-          <option value="Gastos de Casa">Gastos de Casa</option>
-          <option value="Clase EPN">Clase EPN</option>
-          <option value="Clase UTE">Clase UTE</option>
-          <option value="Albazul">Albazul</option>
-          <option value="FAE">FAE</option>
-          <option value="Proyectos Menores">Proyectos Menores</option>
-         </select>
+          <option value="Oficina">Oficina</option>
+          <option value="Casa">Casa</option>
+          <option value="Obra 1">Obra 1</option>
+          <option value="Obra 2">Obra 2</option>
+        </select>
       </div>
+
       <div style="margin-bottom:10px;">
-        <label for="nota">Nota</label>
+        <label for="nota">Nota (detalle / comprobante)</label>
         <textarea id="nota" placeholder="Descripción breve del gasto"></textarea>
       </div>
 
@@ -178,7 +168,6 @@
             <th>Proyecto</th>
             <th>Nota</th>
             <th>ID</th>
-            <th>Borrar</th>
           </tr>
         </thead>
         <tbody id="tbody"></tbody>
@@ -186,7 +175,8 @@
     </div>
 
     <div class="footer">
-      Funciona sin internet (PWA). CSV: Fecha;Categoría;Monto;MedioPago;Nota;Proyecto;ID
+      Los datos se guardan solo en este dispositivo (localStorage).<br>
+      CSV: Fecha;Categoría;Monto;MedioPago;Nota;Proyecto;ID
     </div>
   </div>
 
@@ -213,12 +203,6 @@ function save(data) {
   localStorage.setItem(KEY, JSON.stringify(data));
 }
 
-function escapeHtml(s) {
-  return String(s).replace(/[&<>"']/g, m => (
-    {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]
-  ));
-}
-
 function rowHTML(item) {
   return `
     <tr>
@@ -229,7 +213,6 @@ function rowHTML(item) {
       <td>${escapeHtml(item.Proyecto || "")}</td>
       <td>${escapeHtml(item.Nota || "")}</td>
       <td>${escapeHtml(item.ID || "")}</td>
-      <td><button class="delete-btn" onclick="borrarEgreso('${item.ID}')">✕</button></td>
     </tr>`;
 }
 
@@ -238,17 +221,16 @@ function render() {
   tbody.innerHTML = data.map(rowHTML).join("");
 }
 
-function borrarEgreso(id) {
-  const data = load();
-  const nuevo = data.filter(item => item.ID !== id);
-  save(nuevo);
-  render();
+function escapeHtml(s) {
+  return String(s).replace(/[&<>\"']/g, m => (
+    {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]
+  ));
 }
 
 function collect() {
   const Fecha = $("#fecha").value || hoyISO();
   const catSel = $("#categoria");
-  const Categoría = catSel.value || "Movilización";
+  let Categoría = catSel.value || "Movilización";
   const Monto = parseFloat($("#monto").value || "0");
   const MedioPago = $("#medio").value;
   const Proyecto = $("#proyecto").value.trim();
@@ -273,13 +255,13 @@ function exportCSV() {
   for (const r of rows) {
     const vals = headers.map(h => {
       let v = r[h];
-      if (h === "Monto") v = Number(v || 0).toFixed(2);
+      if (h === "Monto") v = Number(v || 0).toFixed(2); // decimal con punto
       return esc(v);
     });
     lines.push(vals.join(delim));
   }
 
-  const csvText = "\uFEFF" + lines.join("\r\n");
+  const csvText = "\uFEFF" + lines.join("\r\n"); // BOM + CRLF
   const blob = new Blob([csvText], {type:"text/csv;charset=utf-8"});
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
@@ -291,52 +273,32 @@ function exportCSV() {
   a.remove();
   URL.revokeObjectURL(url);
 }
-// service worker (si lo tienes en docs/sw.js)
-if ("serviceWorker" in navigator) {
-  navigator.serviceWorker.register("sw.js").catch(console.error);
-}
+
 document.addEventListener("DOMContentLoaded", () => {
   $("#fecha").value = hoyISO();
   render();
 
-  const btnGuardar = $("#btn-guardar");
-  if (btnGuardar) {
-    btnGuardar.addEventListener("click", () => {
-      const item = collect();
-      const data = load();
-      data.unshift(item);
-      save(data);
+  $("#btn-guardar").addEventListener("click", () => {
+    const item = collect();
+    const data = load();
+    data.unshift(item);
+    save(data);
+    render();
+    $("#monto").value = "";
+    $("#nota").value = "";
+    $("#proyecto").value = "";
+    $("#categoria").value = "Movilización";
+  });
+
+  $("#btn-export").addEventListener("click", exportCSV);
+
+  $("#btn-clear").addEventListener("click", () => {
+    if (confirm("¿Vaciar todos los registros guardados en este dispositivo?")) {
+      save([]);
       render();
-      $("#monto").value = "";
-      $("#nota").value = "";
-      $("#proyecto").value = "";
-      $("#categoria").value = "Movilización";
-    });
-  }
-
-  const btnExport = $("#btn-export");
-  if (btnExport) {
-    btnExport.addEventListener("click", exportCSV);
-  }
-
-  const btnClear = $("#btn-clear");
-  if (btnClear) {
-    btnClear.addEventListener("click", () => {
-      if (confirm("¿Vaciar todos los registros guardados en este dispositivo?")) {
-        save([]);
-        render();
-      }
-    });
-  }
+    }
+  });
 });
 </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
