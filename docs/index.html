@@ -5,9 +5,11 @@
   <title>Registro de Egresos</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
+  <!-- PWA -->
   <link rel="manifest" href="manifest.webmanifest" />
   <meta name="theme-color" content="#0b0c10" />
 
+  <!-- Ícono $ -->
   <link rel="icon" href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="%2314473d"/><text x="50" y="65" font-size="60" text-anchor="middle" fill="white" font-family="sans-serif">$</text></svg>' />
 
   <style>
@@ -112,9 +114,9 @@
             <option value="Movilización" selected>Movilización</option>
             <option value="Comida Afuera">Comida Afuera</option>
             <option value="Regalos">Regalos</option>
-            <option value="Alimentación">Alimentación</option>
           </optgroup>
           <optgroup label="Otras">
+            <option value="Alimentación">Alimentación</option>
             <option value="Casa">Casa</option>
             <option value="Salud">Salud</option>
             <option value="Otros">Otros</option>
@@ -140,11 +142,10 @@
         <label for="proyecto">Proyecto / Obra</label>
         <select id="proyecto">
           <option value="">(Sin proyecto)</option>
-          <option value="Gastos Personales">Gastos Personales</option>
-          <option value="Gastos de Casa">Gastos de Casa</option>
-          <option value="Giro de Negocio">Giro de Negocio</option>
-          <option value="Clase EPN">Clase EPN</option>
-          <option value="Clase UTE">Clase UTE</option>
+          <option value="Oficina">Oficina</option>
+          <option value="Casa">Casa</option>
+          <option value="Obra 1">Obra 1</option>
+          <option value="Obra 2">Obra 2</option>
         </select>
       </div>
 
@@ -206,7 +207,7 @@ function save(data) {
 
 function escapeHtml(s) {
   return String(s).replace(/[&<>"']/g, m => (
-    {"&":"&amp;","<":"&lt;"," >":"&gt;",'"':"&quot;","'":"&#039;"}[m] || m
+    {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]
   ));
 }
 
@@ -239,7 +240,7 @@ function borrarEgreso(id) {
 function collect() {
   const Fecha = $("#fecha").value || hoyISO();
   const catSel = $("#categoria");
-  let Categoría = catSel.value || "Movilización";
+  const Categoría = catSel.value || "Movilización";
   const Monto = parseFloat($("#monto").value || "0");
   const MedioPago = $("#medio").value;
   const Proyecto = $("#proyecto").value.trim();
@@ -255,9 +256,7 @@ function exportCSV() {
   const norm = s => String(s ?? "").normalize("NFC");
   const esc = v => {
     v = norm(v).replaceAll('"','""');
-    if (/[";
-
-;]/.test(v)) v = `"${v}"`;
+    if (/[\";\n\r;]/.test(v)) v = `"${v}"`;
     return v;
   };
 
@@ -272,8 +271,7 @@ function exportCSV() {
     lines.push(vals.join(delim));
   }
 
-  const csvText = "﻿" + lines.join("
-");
+  const csvText = "\uFEFF" + lines.join("\r\n");
   const blob = new Blob([csvText], {type:"text/csv;charset=utf-8"});
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
@@ -286,6 +284,7 @@ function exportCSV() {
   URL.revokeObjectURL(url);
 }
 
+// service worker (si lo tienes en docs/sw.js)
 if ("serviceWorker" in navigator) {
   navigator.serviceWorker.register("sw.js").catch(console.error);
 }
@@ -294,27 +293,37 @@ document.addEventListener("DOMContentLoaded", () => {
   $("#fecha").value = hoyISO();
   render();
 
-  $("#btn-guardar").addEventListener("click", () => {
-    const item = collect();
-    const data = load();
-    data.unshift(item);
-    save(data);
-    render();
-    $("#monto").value = "";
-    $("#nota").value = "";
-    $("#proyecto").value = "";
-    $("#categoria").value = "Movilización";
-  });
-
-  $("#btn-export").addEventListener("click", exportCSV);
-
-  $("#btn-clear").addEventListener("click", () => {
-    if (confirm("¿Vaciar todos los registros guardados en este dispositivo?")) {
-      save([]);
+  const btnGuardar = $("#btn-guardar");
+  if (btnGuardar) {
+    btnGuardar.addEventListener("click", () => {
+      const item = collect();
+      const data = load();
+      data.unshift(item);
+      save(data);
       render();
-    }
-  });
+      $("#monto").value = "";
+      $("#nota").value = "";
+      $("#proyecto").value = "";
+      $("#categoria").value = "Movilización";
+    });
+  }
+
+  const btnExport = $("#btn-export");
+  if (btnExport) {
+    btnExport.addEventListener("click", exportCSV);
+  }
+
+  const btnClear = $("#btn-clear");
+  if (btnClear) {
+    btnClear.addEventListener("click", () => {
+      if (confirm("¿Vaciar todos los registros guardados en este dispositivo?")) {
+        save([]);
+        render();
+      }
+    });
+  }
 });
 </script>
 </body>
 </html>
+
