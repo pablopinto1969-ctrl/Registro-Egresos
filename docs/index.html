@@ -216,7 +216,7 @@
 
       <div style="margin-bottom:10px;">
         <label for="nota">Nota</label>
-        <textarea id="nota" placeholder="Descripción breve del gasto"></textarea>
+        <textarea id="nota" placeholder="Beneficiario"></textarea>
       </div>
 
       <div style="margin-top:8px;">
@@ -245,13 +245,13 @@
 </div>
 
     <div class="footer">
-      Funciona sin internet (PWA). CSV: Fecha;Categoría;Monto;MedioPago;Nota;Proyecto;ID;Borrar
+      Funciona sin internet (PWA). CSV: Fecha;Categoría;Monto;MedioPago;Beneficario;Proyecto;ID;Borrar
     </div>
   </div>
 
 <script>
 const KEY = "egresos_registro_v1";
-const headers = ["Fecha","Categoría","Monto","MedioPago","Nota","Proyecto","ID"];
+const headers = ["Fecha","Categoría","Monto","MedioPago","Beneficario","Proyecto","ID"];
 
 const $ = sel => document.querySelector(sel);
 const tbody = $("#tbody");
@@ -311,9 +311,9 @@ function collect() {
   const Monto = parseFloat($("#monto").value || "0");
   const MedioPago = $("#medio").value;
   const Proyecto = $("#proyecto").value.trim();
-  const Nota = $("#nota").value.trim();
+  const Beneficario = $("#beneficario").value.trim();
   const ID = Date.now().toString(36);
-  return {Fecha, Categoría, Monto, MedioPago, Nota, Proyecto, ID};
+  return {Fecha, Categoría, Monto, MedioPago, Beneficario, Proyecto, ID};
 }
 
 function exportCSV() {
@@ -393,5 +393,6 @@ document.addEventListener("DOMContentLoaded", () => {
 </script>
 </body>
 </html>
+
 
 
