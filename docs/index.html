@@ -8,26 +8,48 @@
   <link rel="icon" href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="%2314473d"/><text x="50" y="65" font-size="60" text-anchor="middle" fill="white" font-family="sans-serif">$</text></svg>' />
   <style>
     :root {
-  --bg:#ffffff;
-  --card:#ffffff;
-  --muted:#d0d0d0;
-  --txt:#000000;
-  --accent:#16a34a;
-}
-    * { box-sizing:border-box; font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; }
-    body { margin:0; background:var(--bg); color:var(--txt); }
+      --bg:#ffffff;      /* fondo general */
+      --card:#ffffff;    /* tarjetas blancas */
+      --muted:#d0d0d0;   /* bordes gris claro */
+      --txt:#000000;     /* texto negro */
+      --accent:#16a34a;  /* botón verde */
+    }
+
+    * {
+      box-sizing:border-box;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+    }
+
+    body {
+      margin:0;
+      background:var(--bg);
+      color:var(--txt);
+    }
+
     header {
       padding:12px 16px;
       display:flex;
       justify-content:space-between;
       align-items:center;
-      background:#000;
+      background:#ffffff;    /* header blanco */
       position:sticky;
       top:0;
       z-index:1;
+      border-bottom:1px solid var(--muted);
     }
-    header h1 { margin:0; font-size:18px; }
-    .wrap { max-width:900px; margin:0 auto; padding:16px; }
+
+    header h1 {
+      margin:0;
+      font-size:18px;
+      color:#000000;         /* título visible */
+    }
+
+    .wrap {
+      max-width:900px;
+      margin:0 auto;
+      padding:16px;
+    }
+
     .card {
       background:var(--card);
       border-radius:16px;
@@ -35,55 +57,90 @@
       padding:16px;
       margin-bottom:16px;
     }
-    label { font-size:12px; opacity:.85; margin-bottom:4px; display:block; }
+
+    label {
+      font-size:12px;
+      opacity:.85;
+      margin-bottom:4px;
+      display:block;
+      color:#000000;
+    }
+
     input, select, textarea {
-  width:100%;
-  padding:10px 12px;
-  border-radius:10px;
-  border:1px solid var(--muted);
-  background:#ffffff;
-  color:#000000;
-  font-size:14px;
-}
-    textarea { min-height:70px; resize:vertical; }
+      width:100%;
+      padding:10px 12px;
+      border-radius:10px;
+      border:1px solid var(--muted);
+      background:#ffffff;    /* campos blancos */
+      color:#000000;         /* texto negro */
+      font-size:14px;
+    }
+
+    textarea {
+      min-height:70px;
+      resize:vertical;
+    }
+
     button {
-  padding:10px 14px;
-  border-radius:10px;
-  border:1px solid var(--muted);
-  background:#ffffff;
-  color:#000000;
-  cursor:pointer;
-  font-size:14px;
-}
+      padding:10px 14px;
+      border-radius:10px;
+      border:1px solid var(--muted);
+      background:#ffffff;    /* botones claros */
+      color:#000000;
+      cursor:pointer;
+      font-size:14px;
+    }
+
     button.primary {
-      background:var(--accent);
+      background:var(--accent);   /* botón Guardar verde */
       border-color:#0a7f36;
       color:#fff;
     }
+
     button + button {
-  padding:10px 14px;
-  border-radius:10px;
-  border:1px solid var(--muted);
-  background:#ffffff;
-  color:#000000;
-  cursor:pointer;
-  font-size:14px;
-}
-    table { width:100%; border-collapse:collapse; font-size:14px; }
+      margin-left:8px;
+    }
+
+    header button {
+      margin-top:6px;
+      margin-bottom:6px;    /* separa Exportar / Vaciar en vertical */
+    }
+
+    table {
+      width:100%;
+      border-collapse:collapse;
+      font-size:14px;
+    }
+
     th, td {
       padding:8px;
       border-bottom:1px solid var(--muted);
       text-align:left;
+      color:#000000;
     }
-    th { font-size:11px; text-transform:uppercase; opacity:.8; }
+
+    th {
+      font-size:11px;
+      text-transform:uppercase;
+      opacity:.8;
+    }
+
     .footer {
       margin-top:16px;
       font-size:11px;
       opacity:.7;
       text-align:center;
+      color:#000000;
     }
-    @media (max-width:600px) {
-      header h1 { font-size:16px; }
+
+    /* botón rojo de borrar, forzado encima del estilo general */
+    button.delete-btn {
+      background:#8b0000 !important;
+      border-color:#5c0000 !important;
+      color:#ffffff !important;
+      font-weight:bold;
+      padding:6px 10px;
+      border-radius:6px;
     }
   </style>
 </head>
@@ -110,12 +167,12 @@
           <optgroup label="Frecuentes">
             <option value="Movilización" selected>Movilización</option>
             <option value="Comida Afuera">Comida Afuera</option>
-            <option value="Regalos">Regalos</option>
+            <option value="Alimentación">Alimentación</option>
           </optgroup>
           <optgroup label="Otras">
-            <option value="Alimentación">Alimentación</option>
             <option value="Casa">Casa</option>
             <option value="Salud">Salud</option>
+            <option value="Profesionales">Profesionales</option>
             <option value="Otros">Otros</option>
           </optgroup>
         </select>
@@ -140,10 +197,14 @@
         <select id="proyecto">
           <!-- EDITA LOS PROYECTOS AQUÍ -->
           <option value="">(Sin proyecto)</option>
-          <option value="Oficina">Oficina</option>
-          <option value="Casa">Casa</option>
-          <option value="Obra 1">Obra 1</option>
-          <option value="Obra 2">Obra 2</option>
+          <option value="Gastos Personales">Gastos Personales</option>
+          <option value="Giro de Negocio">Giro de Negocio</option>
+          <option value="Gastos de Casa">Gastos de Casa</option>
+          <option value="Clase EPN">Clase EPN</option>
+          <option value="Clase UTE">Clase UTE</option>
+          <option value="Albazul">Albazul</option>
+          <option value="FAE">FAE</option>
+          <option value="Proyectos Menores">Proyectos Menores</option>
         </select>
       </div>
 
@@ -302,3 +363,4 @@ document.addEventListener("DOMContentLoaded", () => {
 </script>
 </body>
 </html>
+
