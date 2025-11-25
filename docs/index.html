@@ -289,19 +289,8 @@ function exportCSV() {
 }
 // service worker (si lo tienes en docs/sw.js)
 if ("serviceWorker" in navigator) {
-  navigator.serviceWorker.register("sw.js")
-    .then(reg => {
-      navigator.serviceWorker.addEventListener("message", event => {
-        if (event.data && event.data.type === "NEW_VERSION") {
-          const ok = confirm("Hay una nueva versión de la app. ¿Actualizar ahora?");
-          if (ok) {
-            window.location.reload();
-          }
-        }
-      });
-    })
-    .catch(console.error);
-}  
+  navigator.serviceWorker.register("sw.js").catch(console.error);
+}
 document.addEventListener("DOMContentLoaded", () => {
   $("#fecha").value = hoyISO();
   render();
@@ -339,6 +328,7 @@ document.addEventListener("DOMContentLoaded", () => {
 </script>
 </body>
 </html>
+
 
 
 
