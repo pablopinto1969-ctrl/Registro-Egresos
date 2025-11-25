@@ -4,8 +4,14 @@
   <meta charset="UTF-8" />
   <title>Registro de Egresos</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <!-- Ícono $ embebido -->
+
+  <!-- PWA -->
+  <link rel="manifest" href="manifest.webmanifest" />
+  <meta name="theme-color" content="#ffffff" />
+
+  <!-- Ícono $ -->
   <link rel="icon" href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="%2314473d"/><text x="50" y="65" font-size="60" text-anchor="middle" fill="white" font-family="sans-serif">$</text></svg>' />
+
   <style>
     :root {
       --bg:#ffffff;      /* fondo general */
@@ -41,7 +47,7 @@
     header h1 {
       margin:0;
       font-size:18px;
-      color:#000000;         /* título visible */
+      color:#000000;
     }
 
     .wrap {
@@ -155,6 +161,7 @@
 
   <div class="wrap">
     <div class="card">
+
       <div style="margin-bottom:10px;">
         <label for="fecha">Fecha</label>
         <input type="date" id="fecha" />
@@ -163,10 +170,10 @@
       <div style="margin-bottom:10px;">
         <label for="categoria">Categoría</label>
         <select id="categoria">
-          <!-- EDITA LAS CATEGORÍAS AQUÍ -->
           <optgroup label="Frecuentes">
             <option value="Movilización" selected>Movilización</option>
             <option value="Comida Afuera">Comida Afuera</option>
+            <option value="Regalos">Regalos</option>
             <option value="Alimentación">Alimentación</option>
           </optgroup>
           <optgroup label="Otras">
@@ -195,7 +202,6 @@
       <div style="margin-bottom:10px;">
         <label for="proyecto">Proyecto / Obra</label>
         <select id="proyecto">
-          <!-- EDITA LOS PROYECTOS AQUÍ -->
           <option value="">(Sin proyecto)</option>
           <option value="Gastos Personales">Gastos Personales</option>
           <option value="Giro de Negocio">Giro de Negocio</option>
@@ -209,7 +215,7 @@
       </div>
 
       <div style="margin-bottom:10px;">
-        <label for="nota">Nota (detalle / comprobante)</label>
+        <label for="nota">Nota</label>
         <textarea id="nota" placeholder="Descripción breve del gasto"></textarea>
       </div>
 
@@ -229,6 +235,7 @@
             <th>Proyecto</th>
             <th>Nota</th>
             <th>ID</th>
+            <th>Borrar</th>
           </tr>
         </thead>
         <tbody id="tbody"></tbody>
@@ -236,8 +243,7 @@
     </div>
 
     <div class="footer">
-      Los datos se guardan solo en este dispositivo (localStorage).<br>
-      CSV: Fecha;Categoría;Monto;MedioPago;Nota;Proyecto;ID
+      Funciona sin internet (PWA). CSV: Fecha;Categoría;Monto;MedioPago;Nota;Proyecto;ID
     </div>
   </div>
 
@@ -264,6 +270,12 @@ function save(data) {
   localStorage.setItem(KEY, JSON.stringify(data));
 }
 
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, m => (
+    {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]
+  ));
+}
+
 function rowHTML(item) {
   return `
     <tr>
@@ -274,6 +286,7 @@ function rowHTML(item) {
       <td>${escapeHtml(item.Proyecto || "")}</td>
       <td>${escapeHtml(item.Nota || "")}</td>
       <td>${escapeHtml(item.ID || "")}</td>
+      <td><button class="delete-btn" onclick="borrarEgreso('${item.ID}')">✕</button></td>
     </tr>`;
 }
 
@@ -282,16 +295,17 @@ function render() {
   tbody.innerHTML = data.map(rowHTML).join("");
 }
 
-function escapeHtml(s) {
-  return String(s).replace(/[&<>\"']/g, m => (
-    {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]
-  ));
+function borrarEgreso(id) {
+  const data = load();
+  const nuevo = data.filter(item => item.ID !== id);
+  save(nuevo);
+  render();
 }
 
 function collect() {
   const Fecha = $("#fecha").value || hoyISO();
   const catSel = $("#categoria");
-  let Categoría = catSel.value || "Movilización";
+  const Categoría = catSel.value || "Movilización";
   const Monto = parseFloat($("#monto").value || "0");
   const MedioPago = $("#medio").value;
   const Proyecto = $("#proyecto").value.trim();
@@ -316,13 +330,13 @@ function exportCSV() {
   for (const r of rows) {
     const vals = headers.map(h => {
       let v = r[h];
-      if (h === "Monto") v = Number(v || 0).toFixed(2); // decimal con punto
+      if (h === "Monto") v = Number(v || 0).toFixed(2);
       return esc(v);
     });
     lines.push(vals.join(delim));
   }
 
-  const csvText = "\uFEFF" + lines.join("\r\n"); // BOM + CRLF
+  const csvText = "\uFEFF" + lines.join("\r\n");
   const blob = new Blob([csvText], {type:"text/csv;charset=utf-8"});
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
@@ -335,32 +349,45 @@ function exportCSV() {
   URL.revokeObjectURL(url);
 }
 
+// service worker (si lo tienes en docs/sw.js)
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("sw.js").catch(console.error);
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   $("#fecha").value = hoyISO();
   render();
 
-  $("#btn-guardar").addEventListener("click", () => {
-    const item = collect();
-    const data = load();
-    data.unshift(item);
-    save(data);
-    render();
-    $("#monto").value = "";
-    $("#nota").value = "";
-    $("#proyecto").value = "";
-    $("#categoria").value = "Movilización";
-  });
-
-  $("#btn-export").addEventListener("click", exportCSV);
-
-  $("#btn-clear").addEventListener("click", () => {
-    if (confirm("¿Vaciar todos los registros guardados en este dispositivo?")) {
-      save([]);
+  const btnGuardar = $("#btn-guardar");
+  if (btnGuardar) {
+    btnGuardar.addEventListener("click", () => {
+      const item = collect();
+      const data = load();
+      data.unshift(item);
+      save(data);
       render();
-    }
-  });
+      $("#monto").value = "";
+      $("#nota").value = "";
+      $("#proyecto").value = "";
+      $("#categoria").value = "Movilización";
+    });
+  }
+
+  const btnExport = $("#btn-export");
+  if (btnExport) {
+    btnExport.addEventListener("click", exportCSV);
+  }
+
+  const btnClear = $("#btn-clear");
+  if (btnClear) {
+    btnClear.addEventListener("click", () => {
+      if (confirm("¿Vaciar todos los registros guardados en este dispositivo?")) {
+        save([]);
+        render();
+      }
+    });
+  }
 });
 </script>
 </body>
 </html>
-
