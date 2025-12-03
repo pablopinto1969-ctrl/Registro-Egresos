@@ -220,7 +220,10 @@
         <label for="beneficario">Beneficario</label>
         <textarea id="beneficario" placeholder="Beneficiario"></textarea>
       </div>
-
+      <div style="margin-bottom:10px;">
+        <label for="Código">Codigo</label>
+        <textarea id="codigo" placeholder="Código"></textarea>
+      </div>
       <div style="margin-top:8px;">
         <button id="btn-guardar" class="primary">Guardar egreso</button>
       </div>
@@ -238,6 +241,7 @@
           <th>Proyecto</th>
           <th>Beneficiario</th>
           <th>ID</th>
+          <th>Codigo</th>
           <th>Borrar</th>
         </tr>
       </thead>
@@ -290,6 +294,7 @@ function rowHTML(item) {
       <td>${escapeHtml(item.Proyecto || "")}</td>
       <td>${escapeHtml(item.Beneficario || "")}</td>
       <td>${escapeHtml(item.ID || "")}</td>
+      <td>${escapeHtml(item.Codigo || "")}</td>
       <td><button class="delete-btn" onclick="borrarEgreso('${item.ID}')">✕</button></td>
     </tr>`;
 }
@@ -314,8 +319,9 @@ function collect() {
   const MedioPago = $("#medio").value;
   const Proyecto = $("#proyecto").value.trim();
   const Beneficario = $("#beneficario").value.trim();
+  const Codigo = $("#codigo").value.trim()
   const ID = Date.now().toString(36);
-  return {Fecha, Categoría, Monto, MedioPago, Beneficario, Proyecto, ID};
+  return {Fecha, Categoría, Monto, MedioPago, Beneficario, Proyecto, ID, código};
 }
 
 function exportCSV() {
@@ -395,6 +401,7 @@ document.addEventListener("DOMContentLoaded", () => {
 </script>
 </body>
 </html>
+
 
 
 
