@@ -13,134 +13,88 @@
   <link rel="icon" href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="%2314473d"/><text x="50" y="65" font-size="60" text-anchor="middle" fill="white" font-family="sans-serif">$</text></svg>' />
 
   <style>
-    :root {
-      --bg:#ffffff;      /* fondo general */
-      --card:#ffffff;    /* tarjetas blancas */
-      --muted:#d0d0d0;   /* bordes gris claro */
-      --txt:#000000;     /* texto negro */
-      --accent:#16a34a;  /* botón verde */
+    :root{
+      --bg:#ffffff;
+      --card:#ffffff;
+      --muted:#d0d0d0;
+      --txt:#000000;
+      --accent:#16a34a;
     }
+    *{ box-sizing:border-box; font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif; }
+    body{ margin:0; background:var(--bg); color:var(--txt); }
 
-    * {
-      box-sizing:border-box;
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
-    }
-
-    body {
-      margin:0;
-      background:var(--bg);
-      color:var(--txt);
-    }
-
-    header {
+    header{
       padding:12px 16px;
       display:flex;
       justify-content:space-between;
       align-items:center;
-      background:#ffffff;    /* header blanco */
+      background:#ffffff;
       position:sticky;
       top:0;
       z-index:1;
       border-bottom:1px solid var(--muted);
+      gap:12px;
     }
+    header h1{ margin:0; font-size:18px; color:#000000; }
+    header button{ margin-top:6px; margin-bottom:6px; }
 
-    header h1 {
-      margin:0;
-      font-size:18px;
-      color:#000000;
-    }
-
-    .wrap {
-      max-width:900px;
-      margin:0 auto;
-      padding:16px;
-    }
-
-    .card {
+    .wrap{ max-width:900px; margin:0 auto; padding:16px; }
+    .card{
       background:var(--card);
       border-radius:16px;
       border:1px solid var(--muted);
       padding:16px;
       margin-bottom:16px;
     }
+    label{ font-size:12px; opacity:.85; margin-bottom:4px; display:block; color:#000; }
 
-    label {
-      font-size:12px;
-      opacity:.85;
-      margin-bottom:4px;
-      display:block;
-      color:#000000;
-    }
-
-    input, select, textarea {
+    input,select,textarea{
       width:100%;
       padding:10px 12px;
       border-radius:10px;
       border:1px solid var(--muted);
-      background:#ffffff;    /* campos blancos */
-      color:#000000;         /* texto negro */
+      background:#ffffff;
+      color:#000000;
       font-size:14px;
     }
+    textarea{ min-height:70px; resize:vertical; }
 
-    textarea {
-      min-height:70px;
-      resize:vertical;
-    }
-
-    button {
+    button{
       padding:10px 14px;
       border-radius:10px;
       border:1px solid var(--muted);
-      background:#ffffff;    /* botones claros */
+      background:#ffffff;
       color:#000000;
       cursor:pointer;
       font-size:14px;
     }
-
-    button.primary {
-      background:var(--accent);   /* botón Guardar verde */
+    button.primary{
+      background:var(--accent);
       border-color:#0a7f36;
       color:#fff;
     }
+    button + button{ margin-left:8px; }
 
-    button + button {
-      margin-left:8px;
-    }
-
-    header button {
-      margin-top:6px;
-      margin-bottom:6px;    /* separa Exportar / Vaciar en vertical */
-    }
-
-    table {
+    .table-wrap{ width:100%; overflow-x:auto; }
+    table{
       width:100%;
       border-collapse:collapse;
       font-size:14px;
+      min-width:900px; /* para que aparezcan todas las columnas en móvil con scroll */
     }
-
-    th, td {
+    th,td{
       padding:8px;
       border-bottom:1px solid var(--muted);
       text-align:left;
-      color:#000000;
+      color:#000;
+      white-space:nowrap;
+      vertical-align:top;
     }
+    th{ font-size:11px; text-transform:uppercase; opacity:.8; }
 
-    th {
-      font-size:11px;
-      text-transform:uppercase;
-      opacity:.8;
-    }
+    .footer{ margin-top:16px; font-size:11px; opacity:.7; text-align:center; color:#000; }
 
-    .footer {
-      margin-top:16px;
-      font-size:11px;
-      opacity:.7;
-      text-align:center;
-      color:#000000;
-    }
-
-    /* botón rojo de borrar, forzado encima del estilo general */
-    button.delete-btn {
+    button.delete-btn{
       background:#8b0000 !important;
       border-color:#5c0000 !important;
       color:#ffffff !important;
@@ -150,6 +104,7 @@
     }
   </style>
 </head>
+
 <body>
   <header>
     <h1>Registro de Egresos</h1>
@@ -180,7 +135,6 @@
             <option value="Casa">Casa</option>
             <option value="Salud">Salud</option>
             <option value="Profesionales">Profesionales</option>
-            <option value="Empleada">Empleada</option>
             <option value="Otros">Otros</option>
           </optgroup>
         </select>
@@ -211,53 +165,60 @@
           <option value="Clase UTE">Clase UTE</option>
           <option value="Albazul">Albazul</option>
           <option value="FAE">FAE</option>
-          <option value="EPN-FIM">EPN.FIM</option>
           <option value="Proyectos Menores">Proyectos Menores</option>
         </select>
       </div>
 
       <div style="margin-bottom:10px;">
-        <label for="beneficario">Beneficario</label>
-        <textarea id="beneficario" placeholder="Beneficiario"></textarea>
+        <label for="beneficario">Beneficiario</label>
+        <input id="beneficario" type="text" placeholder="Nombre / proveedor" />
       </div>
+
       <div style="margin-bottom:10px;">
-        <label for="Código">Codigo</label>
-        <textarea id="codigo" placeholder="Código"></textarea>
+        <label for="codigo">Código</label>
+        <input id="codigo" type="text" placeholder="Código del proyecto (opcional)" />
       </div>
+
+      <div style="margin-bottom:10px;">
+        <label for="nota">Nota</label>
+        <textarea id="nota" placeholder="Descripción breve del gasto"></textarea>
+      </div>
+
       <div style="margin-top:8px;">
         <button id="btn-guardar" class="primary">Guardar egreso</button>
       </div>
     </div>
 
-  <div class="card">
-  <div class="table-wrap">
-    <table>
-      <thead>
-        <tr>
-          <th>Fecha</th>
-          <th>Categoría</th>
-          <th>Monto</th>
-          <th>Medio</th>
-          <th>Proyecto</th>
-          <th>Beneficiario</th>
-          <th>ID</th>
-          <th>Codigo</th>
-          <th>Borrar</th>
-        </tr>
-      </thead>
-      <tbody id="tbody"></tbody>
-    </table>
-  </div>
-</div>
+    <div class="card">
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Fecha</th>
+              <th>Categoría</th>
+              <th>Monto</th>
+              <th>Medio</th>
+              <th>Proyecto</th>
+              <th>Beneficiario</th>
+              <th>Código</th>
+              <th>Nota</th>
+              <th>ID</th>
+              <th>Borrar</th>
+            </tr>
+          </thead>
+          <tbody id="tbody"></tbody>
+        </table>
+      </div>
+    </div>
 
     <div class="footer">
-      Funciona sin internet (PWA). CSV: Fecha;Categoría;Monto;MedioPago;Beneficario;Proyecto;ID;Borrar
+      Funciona sin internet (PWA). CSV: Fecha;Categoría;Monto;MedioPago;Proyecto;Beneficario;Codigo;Nota;ID
     </div>
   </div>
 
 <script>
 const KEY = "egresos_registro_v1";
-const headers = ["Fecha","Categoría","Monto","MedioPago","Beneficario","Proyecto","ID"];
+const headers = ["Fecha","Categoría","Monto","MedioPago","Proyecto","Beneficario","Codigo","Nota","ID"];
 
 const $ = sel => document.querySelector(sel);
 const tbody = $("#tbody");
@@ -265,7 +226,7 @@ const tbody = $("#tbody");
 function hoyISO() {
   const d = new Date();
   const off = d.getTimezoneOffset();
-  const d2 = new Date(d.getTime() - off*60000);
+  const d2 = new Date(d.getTime() - off * 60000);
   return d2.toISOString().slice(0,10);
 }
 
@@ -279,7 +240,7 @@ function save(data) {
 }
 
 function escapeHtml(s) {
-  return String(s).replace(/[&<>"']/g, m => (
+  return String(s ?? "").replace(/[&<>"']/g, m => (
     {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]
   ));
 }
@@ -287,14 +248,15 @@ function escapeHtml(s) {
 function rowHTML(item) {
   return `
     <tr>
-      <td>${item.Fecha || ""}</td>
-      <td>${escapeHtml(item.Categoría || "")}</td>
+      <td>${escapeHtml(item.Fecha)}</td>
+      <td>${escapeHtml(item.Categoría)}</td>
       <td>${Number(item.Monto || 0).toFixed(2)}</td>
-      <td>${escapeHtml(item.MedioPago || "")}</td>
-      <td>${escapeHtml(item.Proyecto || "")}</td>
-      <td>${escapeHtml(item.Beneficario || "")}</td>
-      <td>${escapeHtml(item.ID || "")}</td>
-      <td>${escapeHtml(item.Codigo || "")}</td>
+      <td>${escapeHtml(item.MedioPago)}</td>
+      <td>${escapeHtml(item.Proyecto)}</td>
+      <td>${escapeHtml(item.Beneficario)}</td>
+      <td>${escapeHtml(item.Codigo)}</td>
+      <td>${escapeHtml(item.Nota)}</td>
+      <td>${escapeHtml(item.ID)}</td>
       <td><button class="delete-btn" onclick="borrarEgreso('${item.ID}')">✕</button></td>
     </tr>`;
 }
@@ -313,15 +275,17 @@ function borrarEgreso(id) {
 
 function collect() {
   const Fecha = $("#fecha").value || hoyISO();
-  const catSel = $("#categoria");
-  const Categoría = catSel.value || "Movilización";
+  const Categoría = $("#categoria").value || "Movilización";
   const Monto = parseFloat($("#monto").value || "0");
   const MedioPago = $("#medio").value;
   const Proyecto = $("#proyecto").value.trim();
   const Beneficario = $("#beneficario").value.trim();
-  const Codigo = $("#codigo").value.trim()
+  const Codigo = $("#codigo").value.trim();
+  const Nota = $("#nota").value.trim();
   const ID = Date.now().toString(36);
-  return {Fecha, Categoría, Monto, MedioPago, Beneficario, Proyecto, ID, código};
+
+  // Importante: "Codigo" sin tilde para que coincida con headers y tabla
+  return {Fecha, Categoría, Monto, MedioPago, Proyecto, Beneficario, Codigo, Nota, ID};
 }
 
 function exportCSV() {
@@ -337,6 +301,7 @@ function exportCSV() {
 
   let lines = [];
   lines.push(headers.map(h => esc(h)).join(delim));
+
   for (const r of rows) {
     const vals = headers.map(h => {
       let v = r[h];
@@ -359,7 +324,6 @@ function exportCSV() {
   URL.revokeObjectURL(url);
 }
 
-// service worker (si lo tienes en docs/sw.js)
 if ("serviceWorker" in navigator) {
   navigator.serviceWorker.register("sw.js").catch(console.error);
 }
@@ -368,39 +332,35 @@ document.addEventListener("DOMContentLoaded", () => {
   $("#fecha").value = hoyISO();
   render();
 
-  const btnGuardar = $("#btn-guardar");
-  if (btnGuardar) {
-    btnGuardar.addEventListener("click", () => {
-      const item = collect();
-      const data = load();
-      data.unshift(item);
-      save(data);
+  $("#btn-guardar").addEventListener("click", () => {
+    const item = collect();
+    const data = load();
+    data.unshift(item);
+    save(data);
+    render();
+
+    $("#monto").value = "";
+    $("#beneficario").value = "";
+    $("#codigo").value = "";
+    $("#nota").value = "";
+    $("#proyecto").value = "";
+    $("#categoria").value = "Movilización";
+  });
+
+  $("#btn-export").addEventListener("click", exportCSV);
+
+  $("#btn-clear").addEventListener("click", () => {
+    if (confirm("¿Vaciar todos los registros guardados en este dispositivo?")) {
+      save([]);
       render();
-      $("#monto").value = "";
-      $("#beneficario").value = "";
-      $("#proyecto").value = "";
-      $("#categoria").value = "Movilización";
-    });
-  }
-
-  const btnExport = $("#btn-export");
-  if (btnExport) {
-    btnExport.addEventListener("click", exportCSV);
-  }
-
-  const btnClear = $("#btn-clear");
-  if (btnClear) {
-    btnClear.addEventListener("click", () => {
-      if (confirm("¿Vaciar todos los registros guardados en este dispositivo?")) {
-        save([]);
-        render();
-      }
-    });
-  }
+    }
+  });
 });
 </script>
 </body>
 </html>
+
+
 
 
 
